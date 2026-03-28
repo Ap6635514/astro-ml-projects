@@ -57,10 +57,10 @@ This project uses Machine Learning to automatically classify celestial objects b
 ---
 
 ## 📂 Project Structure
-app.py-Web app
-Model.pkl-Trained Model 
-Notebook/-Analysis
-Images/-visualization
+- app.py - Web app 
+- Model. pkl - Trained Model 
+- Notebook/- Analysis
+- Images/- visualization
 
 ---
 
