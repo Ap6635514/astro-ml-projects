@@ -4,7 +4,10 @@ from sklearn.ensemble import RandomForestClassifier
 
 # ✅ Load + train model ONCE (cached)
 def load_model():
-    df = pd.read_csv("star_classification.csv")
+    try:
+        df = pd.read_csv("star_classification.csv")
+    except FileNotFoundError:
+        raise FileNotFoundError("Dataset file 'star_classification.csv' not found. Please ensure it exists in the root directory.")
 
     # Clean
     df = df[(df["u"] > 0) & (df["u"] < 30)]
@@ -28,7 +31,7 @@ def load_model():
 
     return model
 
-model = load_model()
+model = None
 
 # ✅ Prediction
 def predict(u, g, r, i, z, redshift):
@@ -53,18 +56,22 @@ def predict(u, g, r, i, z, redshift):
         return "💫 QSO"
 
 # UI
-demo = gr.Interface(
-    fn=predict,
-    inputs=[
-        gr.Number(label="u"),
-        gr.Number(label="g"),
-        gr.Number(label="r"),
-        gr.Number(label="i"),
-        gr.Number(label="z"),
-        gr.Number(label="redshift")
-    ],
-    outputs="text",
-    title="🌌 Astronomy Classifier"
-)
+def create_demo():
+    return gr.Interface(
+        fn=predict,
+        inputs=[
+            gr.Number(label="u"),
+            gr.Number(label="g"),
+            gr.Number(label="r"),
+            gr.Number(label="i"),
+            gr.Number(label="z"),
+            gr.Number(label="redshift")
+        ],
+        outputs="text",
+        title="🌌 Astronomy Classifier"
+    )
 
-demo.launch()
+if __name__ == "__main__":
+    model = load_model()
+    demo = create_demo()
+    demo.launch()
